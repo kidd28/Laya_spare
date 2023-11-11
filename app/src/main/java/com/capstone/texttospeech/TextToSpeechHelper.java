@@ -24,25 +24,21 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.texttospeech.v1.AudioConfig;
 import com.google.cloud.texttospeech.v1.AudioEncoding;
 import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
+import com.google.cloud.texttospeech.v1.SynthesisInput;
 import com.google.cloud.texttospeech.v1.SynthesizeSpeechRequest;
-import com.google.cloud.texttospeech.v1.TextToSpeechClient;
+import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
+import com.google.cloud.texttospeech.v1.TextToSpeechGrpc;
 import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
 import com.google.protobuf.ByteString;
 
-import com.google.cloud.texttospeech.v1.TextToSpeechGrpc;
-import com.google.cloud.texttospeech.v1.SynthesisInput;
-import com.google.cloud.texttospeech.v1.AudioConfig;
-import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -105,6 +101,8 @@ public class TextToSpeechHelper {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 try (OutputStream out = Files.newOutputStream(localPath.toPath())) {
                     out.write(audioContents.toByteArray());
+                    Uri uri = Uri.fromFile(localPath);
+                    System.out.println(uri);
                     MediaPlayer mPlayer = MediaPlayer.create(context, Uri.parse(localPath.toString()));
                     mPlayer.start();
                 } catch (IOException e) {
@@ -125,6 +123,9 @@ public class TextToSpeechHelper {
         }
 
     };
+
+
+
 
     public TextToSpeechHelper(Context context) {
         this.context = context;
@@ -213,7 +214,7 @@ public class TextToSpeechHelper {
             // folder of this client app. You should never do this in your app. Instead, store
             // the file in your server and obtain an access token from there.
             // *******************
-            final InputStream stream = context.getResources().openRawResource(R.raw.texttospeech);
+            final InputStream stream = context.getResources().openRawResource(R.raw.laya);
             try {
                 final GoogleCredentials credentials = GoogleCredentials.fromStream(stream)
                         .createScoped(SCOPE);

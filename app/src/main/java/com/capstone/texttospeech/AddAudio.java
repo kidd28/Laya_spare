@@ -6,12 +6,15 @@ import static android.util.Log.e;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -21,6 +24,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,13 +43,18 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
-public class AddAudio extends AppCompatActivity {
+import pub.devrel.easypermissions.EasyPermissions;
+
+public class AddAudio extends AppCompatActivity{
 
     Button uploadAudio, uploadImage, upload;
     private static final int REQUEST_PICK_AUDIO = 2;
     private final int PICK_IMAGE_REQUEST = 22;
+    private static final int CAMERA_PERMISSION_CODE = 100;
+    private static final int STORAGE_PERMISSION_CODE = 101;
     Uri audioUri;
     String fname;
     private Uri imagefilePath;
@@ -57,6 +66,8 @@ public class AddAudio extends AppCompatActivity {
     TextView audioname;
     FirebaseStorage storage;
     StorageReference storageReference;
+
+    EditText Edname;
 
 
     @Override
@@ -70,6 +81,8 @@ public class AddAudio extends AppCompatActivity {
         upload = findViewById(R.id.upload);
         AudioImage = findViewById(R.id.CatgoryImage);
         audioname = findViewById(R.id.audioname);
+        Edname = findViewById(R.id.Name);
+
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -86,8 +99,8 @@ public class AddAudio extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                          switch (i){
                              case 0:
-                                 Intent pickAudioIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-                                 startActivityForResult(pickAudioIntent, REQUEST_PICK_AUDIO);
+                                 checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
+
                                  break;
                              case 1:
                                  Toast.makeText(AddAudio.this, "Wala pa to", Toast.LENGTH_SHORT).show();
@@ -109,7 +122,12 @@ public class AddAudio extends AppCompatActivity {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadAudio(audioUri, fname);
+
+                if (Edname.getText().toString().equals("")) {
+                    Toast.makeText(AddAudio.this,"Lagay ka kaya aac name", Toast.LENGTH_SHORT ).show();
+                } else {
+                    uploadAudio(audioUri, fname);
+                }
             }
         });
     }
@@ -172,26 +190,29 @@ public class AddAudio extends AppCompatActivity {
                     Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uriTask.isSuccessful()) ;
                     if(uriTask.isSuccessful()) {
-                        String downloadUri = uriTask.getResult().toString();
-                        Toast.makeText(AddAudio.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ProvidedAudio").child(category);
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("Name", filename);
-                        hashMap.put("FilePath", filePathAndName);
-                        hashMap.put("FileName", filename + "_" + AudioId);
-                        hashMap.put("FileLink", downloadUri);
-                        reference.child(filename).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                uploadImage(category,filename);
-                                progressDialog.dismiss();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                progressDialog.dismiss();
-                            }
-                        });
+                        String Name = Edname.getText().toString();
+                            String id = String.valueOf(System.currentTimeMillis());
+                            String downloadUri = uriTask.getResult().toString();
+                            Toast.makeText(AddAudio.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ProvidedAudio");
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("Name", Name);
+                            hashMap.put("Category", category);
+                            hashMap.put("FileName", filename + "_" + AudioId);
+                            hashMap.put("FileLink", downloadUri);
+                            hashMap.put("Id", id);
+                            reference.child(filename).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    uploadImage(category, filename);
+                                    progressDialog.dismiss();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    progressDialog.dismiss();
+                                }
+                            });
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -256,7 +277,7 @@ public class AddAudio extends AppCompatActivity {
                                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ProvidedAudio");
                                         HashMap<String, Object> hashMap = new HashMap<>();
                                         hashMap.put("ImageLink", downloadUri);
-                                        reference.child(categoryName).child(filename).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        reference.child(filename).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 Intent i = new Intent(AddAudio.this, AudioList.class);
@@ -296,6 +317,41 @@ public class AddAudio extends AppCompatActivity {
                             });
         }
     }
+
+    public void checkPermission(String permission, int requestCode)
+    {
+        // Checking if permission is not granted
+        if (ContextCompat.checkSelfPermission(AddAudio.this, permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(AddAudio.this, new String[] { permission }, requestCode);
+        }
+        else {
+            Toast.makeText(AddAudio.this, "Permission already granted", Toast.LENGTH_SHORT).show();
+            pickAudio();
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(AddAudio.this, "Storage Permission Granted", Toast.LENGTH_SHORT).show();
+                pickAudio();
+            }
+            else {
+                Toast.makeText(AddAudio.this, "Storage Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void pickAudio() {
+        Intent pickAudioIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickAudioIntent, REQUEST_PICK_AUDIO);
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

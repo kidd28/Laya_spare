@@ -71,13 +71,8 @@ public class AudioList extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snap : snapshot.getChildren()){
                     if (Objects.equals(snap.child("Category").getValue(), category)) {
-                        for (DataSnapshot s : snap.getChildren()) {
-                            if(!s.getKey().equals("Category")&&!s.getKey().equals("ImageLink")){
-                                AudioModel model = s.getValue(AudioModel.class);
+                                AudioModel model = snap.getValue(AudioModel.class);
                                 audioModels.add(model);
-                            }
-
-                        }
                     }
                 }
                 AudioAdapter adapter = new AudioAdapter(AudioList.this, audioModels);

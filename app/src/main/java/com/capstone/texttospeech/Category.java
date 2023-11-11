@@ -54,7 +54,7 @@ public class Category extends AppCompatActivity {
 
     }
     private void loadCategories() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ProvidedAudio");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ProvidedCategory");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
