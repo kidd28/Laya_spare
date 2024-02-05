@@ -24,10 +24,24 @@
         android:theme="@style/Theme.TextToSpeech"
         tools:targetApi="31">
         <activity
+            android:name=".AddAudioFil"
+            android:exported="false"
+            android:label="@string/title_activity_add_audio_fil"
+            android:theme="@style/Theme.TextToSpeech" />
+        <activity
             android:name=".AddAudio"
             android:exported="false" />
         <activity
+            android:name=".AddCategoryEng"
+            android:exported="false" />
+        <activity
             android:name=".AddCategory"
+            android:exported="false" />
+        <activity
+            android:name=".AddAudioEng"
+            android:exported="false" />
+        <activity
+            android:name=".AddCategoryFil"
             android:exported="false" />
         <activity
             android:name=".AudioList"

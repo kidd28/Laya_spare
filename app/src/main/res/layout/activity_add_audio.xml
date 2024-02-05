@@ -4,66 +4,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    tools:context=".AddAudio">
+    tools:context=".AddAudioEng">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStart="0dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/_200sdp"
-            android:layout_height="wrap_content"
-            android:elevation="2dp">
-            <LinearLayout
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:elevation="2dp">
-                    <ImageView
-                        android:id="@+id/CatgoryImage"
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="@dimen/_100sdp"/>
-                </androidx.cardview.widget.CardView>
-                <Button
-                    android:id="@+id/uploadImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Upload Image"
-                    android:layout_marginBottom="@dimen/_30sdp" />
-                <TextView
-                    android:id="@+id/audioname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Audio name"
-                    android:layout_marginBottom="@dimen/_5sdp"/>
-                    <Button
-                        android:id="@+id/uploadAudio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Upload Audio"/>
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/_5sdp">
 
-                <EditText
-                    android:id="@+id/Name"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_width="@dimen/_200sdp"
-                    android:layout_height="match_parent"
-                    android:hint="AAC Name"
-                    />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <Button
-            android:gravity="center"
+    =
+
+        <TextView
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_32sdp"
+            android:text="Add word"
+            android:textSize="@dimen/_20sdp"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            />
+
+        <Button
             android:id="@+id/upload"
+            android:text="Save"
+            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload"/>
+            android:layout_marginRight="@dimen/_20sdp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:gravity="center"
+        android:orientation="vertical">
+            <EditText
+                android:id="@+id/Name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/black"
+                android:textColorHint="#BCBCBC"
+                android:textColor="@color/black"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginEnd="@dimen/_30sdp"
+                android:hint="Input new AAC name" />
+        <TextView
+            android:id="@+id/audioname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Audio name"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"/>
+        <Button
+            android:id="@+id/uploadAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Audio"/>
+        <ImageView
+            android:id="@+id/CatgoryImage"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_height="@dimen/_100sdp"/>
+        <Button
+            android:id="@+id/uploadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="Upload Image"
+            android:layout_marginBottom="@dimen/_30sdp" />
+
     </LinearLayout>
 </RelativeLayout>

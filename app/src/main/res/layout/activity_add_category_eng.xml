@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddCategoryFil">
+    tools:context=".AddCategoryEng">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -67,14 +67,14 @@
                 android:text="Pick Color"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_5sdp"
-               />
+                />
             <Button
-            android:id="@+id/materialColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pick Material Color"
-            android:layout_marginTop="@dimen/_10sdp"
-           />
+                android:id="@+id/materialColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick Material Color"
+                android:layout_marginTop="@dimen/_10sdp"
+                />
         </LinearLayout>
 
         <Button

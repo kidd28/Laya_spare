@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddCategoryFil">
-
+    tools:context=".AddAudioFil">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         app:contentInsetEnd="0dp"
@@ -16,18 +15,21 @@
         android:background="@color/white"
         android:layout_marginTop="@dimen/_5sdp">
 
+        =
+
         <TextView
             android:layout_gravity="center"
             android:id="@+id/tv"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_32sdp"
-            android:text="Add Category"
+            android:text="Add word"
             android:textSize="@dimen/_20sdp"
             android:textColor="@color/black"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            />
 
         <Button
-            android:id="@+id/save"
+            android:id="@+id/upload"
             android:text="Save"
             android:layout_gravity="end"
             android:layout_width="wrap_content"
@@ -35,7 +37,6 @@
             android:layout_marginRight="@dimen/_20sdp" />
 
     </androidx.appcompat.widget.Toolbar>
-
 
     <LinearLayout
         android:layout_below="@id/toolbar"
@@ -45,7 +46,7 @@
         android:gravity="center"
         android:orientation="vertical">
         <EditText
-            android:id="@+id/EditText"
+            android:id="@+id/Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/black"
@@ -53,46 +54,31 @@
             android:textColor="@color/black"
             android:layout_marginStart="@dimen/_30sdp"
             android:layout_marginEnd="@dimen/_30sdp"
-            android:hint="Enter category name" />
-
-        <LinearLayout
+            android:hint="Input new AAC name" />
+        <TextView
+            android:id="@+id/audioname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/colorPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pick Color"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_5sdp"
-               />
-            <Button
-            android:id="@+id/materialColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pick Material Color"
+            android:text="Audio name"
             android:layout_marginTop="@dimen/_10sdp"
-           />
-        </LinearLayout>
-
+            android:layout_marginBottom="@dimen/_5sdp"/>
+        <Button
+            android:id="@+id/uploadAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Audio"/>
+        <ImageView
+            android:id="@+id/CatgoryImage"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_height="@dimen/_100sdp"/>
         <Button
             android:id="@+id/uploadImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
             android:text="Upload Image"
-            android:layout_marginTop="@dimen/_10sdp"
-            />
-
-        <ImageView
-            android:layout_marginTop="@dimen/_10sdp"
-            android:id="@+id/CatgoryImage"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_100sdp" />
-
-
+            android:layout_marginBottom="@dimen/_30sdp" />
 
     </LinearLayout>
-
 </RelativeLayout>

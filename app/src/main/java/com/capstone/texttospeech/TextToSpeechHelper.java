@@ -92,6 +92,11 @@ public class TextToSpeechHelper {
     private static Handler mHandler;
     private Context context;
     private File localPath;
+    String action;
+    String AddorEdit;
+
+    private Handler handler;
+    private Runnable handlerTask;
 
     private final StreamObserver<SynthesizeSpeechResponse> mSynthesizeSpeechResponseObserver
             = new StreamObserver<SynthesizeSpeechResponse>() {
@@ -101,16 +106,18 @@ public class TextToSpeechHelper {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 try (OutputStream out = Files.newOutputStream(localPath.toPath())) {
                     out.write(audioContents.toByteArray());
-                    Uri uri = Uri.fromFile(localPath);
-                    System.out.println(uri);
-                    MediaPlayer mPlayer = MediaPlayer.create(context, Uri.parse(localPath.toString()));
-                    mPlayer.start();
+                    if(action.equals("Play")){
+                        MediaPlayer mPlayer = MediaPlayer.create(context, Uri.parse(localPath.toString()));
+                        mPlayer.start();
+                    }else if(action.equals("Save")){
+
+                        upload(localPath);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
-
         @Override
         public void onError(Throwable t) {
             Log.e(TAG, "Error calling the API.", t);
@@ -124,11 +131,36 @@ public class TextToSpeechHelper {
 
     };
 
+    private void upload(File localPath) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Uri uri = Uri.fromFile(localPath);
+                System.out.println(uri);
+                String filename = localPath.getName();
+                System.out.println(filename);
+
+
+                if(AddorEdit.equals("Add")){
+                    AddAudioEng addAudio = (AddAudioEng) context;
+                    addAudio.uploadAduioFromTTS(uri,filename);
+                } else if (AddorEdit.equals("Edit")) {
+                    AddAudioFil addAudiof = (AddAudioFil) context;
+                    addAudiof.uploadAduioFromTTS(uri,filename);
+                }
+
+            }
+        });
+
+
+    }
 
 
 
-    public TextToSpeechHelper(Context context) {
+
+    public TextToSpeechHelper(Context context, String AddorEdit) {
         this.context = context;
+        this.AddorEdit = AddorEdit;
         mHandler = new Handler();
 
         fetchAccessToken();
@@ -144,7 +176,7 @@ public class TextToSpeechHelper {
                 try {
                     channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
-                    Log.e(TAG, "Error shutting down the gRPC channel.", e);
+                    Log.e(TAG,  "Error shutting down the gRPC channel.", e);
                 }
             }
             mApi = null;
@@ -164,26 +196,25 @@ public class TextToSpeechHelper {
      *
      * @param text The text to convert
      */
-    public void startConvert(String text,String filename) {
+    public void startConvert(String text,String filename, String Action) {
 
-        localPath = new File(Environment.getExternalStorageDirectory()+"/AAC", filename);
+        action = Action;
+        localPath = new File(Environment.getExternalStorageDirectory()+"/AudioAAC",filename);
         if (mApi == null) {
             Log.w(TAG, "API not ready. Ignoring the request.");
             return;
         }
-        mApi.synthesizeSpeech(SynthesizeSpeechRequest.newBuilder()
-                        .setInput(SynthesisInput.newBuilder()
-                                .setText(text))
-                        .setVoice(VoiceSelectionParams.newBuilder()
-                                .setLanguageCode("fil-PH")
-                                .setSsmlGender(SsmlVoiceGender.FEMALE))
-                        .setAudioConfig(AudioConfig.newBuilder()
-                                .setAudioEncoding(AudioEncoding.MP3))
-                        .build(),
-                mSynthesizeSpeechResponseObserver);
+            mApi.synthesizeSpeech(SynthesizeSpeechRequest.newBuilder()
+                            .setInput(SynthesisInput.newBuilder()
+                                    .setText(text))
+                            .setVoice(VoiceSelectionParams.newBuilder()
+                                    .setLanguageCode("fil-PH")
+                                    .setSsmlGender(SsmlVoiceGender.FEMALE))
+                            .setAudioConfig(AudioConfig.newBuilder()
+                                    .setAudioEncoding(AudioEncoding.MP3))
+                            .build(),
+                    mSynthesizeSpeechResponseObserver);
     }
-
-
 
     private final Runnable mFetchAccessTokenRunnable = new Runnable() {
         @Override

@@ -2,7 +2,6 @@ package com.capstone.texttospeech;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,8 +53,25 @@ public class Category extends AppCompatActivity {
 
     }
     private void loadCategories() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ProvidedCategory");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ProvidedCategory").child("English");
         reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    CategoriesModel model = snap.getValue(CategoriesModel.class);
+                    categoriesModels.add(model);
+                }
+                adapter = new CategoriesAdapter(Category.this, categoriesModels);
+                rv.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("ProvidedCategory").child("Filipino");
+        reference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snap : snapshot.getChildren()){

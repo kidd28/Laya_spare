@@ -38,7 +38,7 @@ public class TextToSpeechActivity extends AppCompatActivity {
         ed1=findViewById(R.id.editText);
         speech=findViewById(R.id.button);
 
-        textToSpeechHelper = new TextToSpeechHelper(TextToSpeechActivity.this);
+        textToSpeechHelper = new TextToSpeechHelper(TextToSpeechActivity.this, "Add");
 
         speech.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +53,7 @@ public class TextToSpeechActivity extends AppCompatActivity {
                     }
                 }
                 filename = ed1.getText().toString()+".mp3";
-                textToSpeechHelper.startConvert(ed1.getText().toString(), filename);
+                textToSpeechHelper.startConvert(ed1.getText().toString(), filename, "Add");
             }
         });
     }
