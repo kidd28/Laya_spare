@@ -53,7 +53,7 @@ public class TextToSpeechActivity extends AppCompatActivity {
                     }
                 }
                 filename = ed1.getText().toString()+".mp3";
-                textToSpeechHelper.startConvert(ed1.getText().toString(), filename, "Add");
+                textToSpeechHelper.startConvert(ed1.getText().toString(), filename, "Add", "Filipino");
             }
         });
     }

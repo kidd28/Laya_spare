@@ -204,7 +204,7 @@ public class AddAudioFil extends AppCompatActivity {
                         String TTS = YouEditTextValue.getText().toString();
                         TTS = TTS.replaceAll("[^a-zA-Z0-9]", " ");
 
-                        textToSpeechHelper.startConvert(TTS, TTS + ".mp3", "Save");
+                        textToSpeechHelper.startConvert(TTS, TTS + ".mp3", "Save", "Filipino");
                         dialog.dismiss();
                     }
                 });
@@ -225,7 +225,7 @@ public class AddAudioFil extends AppCompatActivity {
                         //OR
                         String TTS = YouEditTextValue.getText().toString();
                         TTS = TTS.replaceAll("[^a-zA-Z0-9]", " ");
-                        textToSpeechHelper.startConvert(TTS, TTS + ".mp3", "Play");
+                        textToSpeechHelper.startConvert(TTS, TTS + ".mp3", "Play", "Filipino");
                     }
                 });
             }

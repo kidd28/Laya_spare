@@ -92,7 +92,7 @@ public class TextToSpeechHelper {
     private static Handler mHandler;
     private Context context;
     private File localPath;
-    String action;
+    String action,language;
     String AddorEdit;
 
     private Handler handler;
@@ -141,10 +141,10 @@ public class TextToSpeechHelper {
                 System.out.println(filename);
 
 
-                if(AddorEdit.equals("Add")){
+                if(language.equals("English")){
                     AddAudioEng addAudio = (AddAudioEng) context;
                     addAudio.uploadAduioFromTTS(uri,filename);
-                } else if (AddorEdit.equals("Edit")) {
+                } else if (language.equals("Filipino")) {
                     AddAudioFil addAudiof = (AddAudioFil) context;
                     addAudiof.uploadAduioFromTTS(uri,filename);
                 }
@@ -154,7 +154,6 @@ public class TextToSpeechHelper {
 
 
     }
-
 
 
 
@@ -196,14 +195,17 @@ public class TextToSpeechHelper {
      *
      * @param text The text to convert
      */
-    public void startConvert(String text,String filename, String Action) {
+    public void startConvert(String text,String filename, String Action, String Language) {
 
         action = Action;
+        language = Language;
         localPath = new File(Environment.getExternalStorageDirectory()+"/AudioAAC",filename);
         if (mApi == null) {
             Log.w(TAG, "API not ready. Ignoring the request.");
             return;
         }
+
+        if(Language.equals("Filipino")) {
             mApi.synthesizeSpeech(SynthesizeSpeechRequest.newBuilder()
                             .setInput(SynthesisInput.newBuilder()
                                     .setText(text))
@@ -214,6 +216,19 @@ public class TextToSpeechHelper {
                                     .setAudioEncoding(AudioEncoding.MP3))
                             .build(),
                     mSynthesizeSpeechResponseObserver);
+        } else if (Language.equals("English")) {
+            mApi.synthesizeSpeech(SynthesizeSpeechRequest.newBuilder()
+                            .setInput(SynthesisInput.newBuilder()
+                                    .setText(text))
+                            .setVoice(VoiceSelectionParams.newBuilder()
+                                    .setLanguageCode("en-US")
+                                    .setName("en-US-Standard-C")
+                                    .setSsmlGender(SsmlVoiceGender.FEMALE))
+                            .setAudioConfig(AudioConfig.newBuilder()
+                                    .setAudioEncoding(AudioEncoding.MP3))
+                            .build(),
+                    mSynthesizeSpeechResponseObserver);
+        }
     }
 
     private final Runnable mFetchAccessTokenRunnable = new Runnable() {

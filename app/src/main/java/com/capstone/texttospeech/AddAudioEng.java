@@ -210,7 +210,7 @@ public class AddAudioEng extends AppCompatActivity {
                         String TTS = YouEditTextValue.getText().toString();
                         TTS = TTS.replaceAll("[^a-zA-Z0-9]", " ");
 
-                        textToSpeechHelper.startConvert(TTS, TTS + ".mp3", "Save");
+                        textToSpeechHelper.startConvert(TTS, TTS + ".mp3", "Save", "English");
                         dialog.dismiss();
                     }
                 });
@@ -231,7 +231,7 @@ public class AddAudioEng extends AppCompatActivity {
                         //OR
                         String TTS = YouEditTextValue.getText().toString();
                         TTS = TTS.replaceAll("[^a-zA-Z0-9]", " ");
-                        textToSpeechHelper.startConvert(TTS, TTS + ".mp3", "Play");
+                        textToSpeechHelper.startConvert(TTS, TTS + ".mp3", "Play","English");
                     }
                 });
             }
